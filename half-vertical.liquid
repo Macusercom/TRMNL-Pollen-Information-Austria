@@ -1,0 +1,112 @@
+{% assign entries = contamination | sort: "contamination_1" | reverse %}
+{% assign pollen_filter = trmnl.plugin_settings.custom_fields_values.pollen_filter | default: "" | strip %}
+{% assign filter_list = pollen_filter | split: "," %}
+
+{% assign active_count = 0 %}
+{% for entry in entries %}
+  {% if entry.contamination_1 == 0 %}{% continue %}{% endif %}
+  {% if pollen_filter != "" %}
+    {% assign entry_name = entry.poll_title | split: " (" | first | downcase %}
+    {% assign match = false %}
+    {% for f in filter_list %}
+      {% assign f_clean = f | strip | downcase %}
+      {% if entry_name contains f_clean %}{% assign match = true %}{% endif %}
+    {% endfor %}
+    {% unless match %}{% continue %}{% endunless %}
+  {% endif %}
+  {% assign active_count = active_count | plus: 1 %}
+{% endfor %}
+
+<div class="layout layout--col gap--small lg:gap--base">
+  {% if entries.size == 0 %}
+    <div class="flex flex--col flex--center flex--center-x gap stretch-x">
+      <span class="value value--xxlarge">✕</span>
+      <span class="label label--large">Keine Pollendaten verfügbar</span>
+    </div>
+  {% elsif active_count == 0 %}
+    <div class="flex flex--col flex--center flex--center-x gap stretch-x">
+      <span class="value value--xxlarge">✓</span>
+      <span class="label label--large">Keine Pollenbelastung</span>
+    </div>
+  {% else %}
+    <div class="grid grid--cols-2 gap--small lg:gap--base stretch-x" data-overflow="true" data-overflow-counter="true">
+      {% for entry in entries %}
+        {% assign d1 = entry.contamination_1 | default: 0 | plus: 0 %}
+        {% assign d2 = entry.contamination_2 | default: 0 | plus: 0 %}
+        {% assign d3 = entry.contamination_3 | default: 0 | plus: 0 %}
+        {% assign d4 = entry.contamination_4 | default: 0 | plus: 0 %}
+
+        {% if d1 == 0 %}{% continue %}{% endif %}
+
+        {% if pollen_filter != "" %}
+          {% assign entry_name = entry.poll_title | split: " (" | first | downcase %}
+          {% assign match = false %}
+          {% for f in filter_list %}
+            {% assign f_clean = f | strip | downcase %}
+            {% if entry_name contains f_clean %}{% assign match = true %}{% endif %}
+          {% endfor %}
+          {% unless match %}{% continue %}{% endunless %}
+        {% endif %}
+
+        {% assign emphasis = "" %}
+        {% if d1 >= 3 %}
+          {% assign emphasis = " item--emphasis-3" %}
+        {% elsif d1 == 2 %}
+          {% assign emphasis = " item--emphasis-2" %}
+        {% elsif d1 == 1 %}
+          {% assign emphasis = " item--emphasis-1" %}
+        {% endif %}
+
+        <div class="item{{ emphasis }}">
+          <div class="meta"></div>
+
+          <div class="content">
+            <div>
+              <span class="title title--small lg:title--base" data-clamp="2">
+                {{ entry.poll_title | split: " (" | first }}
+              </span>
+
+              {% assign bg1 = "bg--gray-75" %}
+              {% if d1 >= 4 %}{% assign bg1 = "bg--gray-30" %}{% elsif d1 == 3 %}{% assign bg1 = "bg--gray-35" %}{% elsif d1 == 2 %}{% assign bg1 = "bg--gray-50" %}{% elsif d1 == 1 %}{% assign bg1 = "bg--gray-65" %}{% endif %}
+              {% assign bg2 = "bg--gray-75" %}
+              {% if d2 >= 4 %}{% assign bg2 = "bg--gray-30" %}{% elsif d2 == 3 %}{% assign bg2 = "bg--gray-35" %}{% elsif d2 == 2 %}{% assign bg2 = "bg--gray-50" %}{% elsif d2 == 1 %}{% assign bg2 = "bg--gray-65" %}{% endif %}
+              {% assign bg3 = "bg--gray-75" %}
+              {% if d3 >= 4 %}{% assign bg3 = "bg--gray-30" %}{% elsif d3 == 3 %}{% assign bg3 = "bg--gray-35" %}{% elsif d3 == 2 %}{% assign bg3 = "bg--gray-50" %}{% elsif d3 == 1 %}{% assign bg3 = "bg--gray-65" %}{% endif %}
+              {% assign bg4 = "bg--gray-75" %}
+              {% if d4 >= 4 %}{% assign bg4 = "bg--gray-30" %}{% elsif d4 == 3 %}{% assign bg4 = "bg--gray-35" %}{% elsif d4 == 2 %}{% assign bg4 = "bg--gray-50" %}{% elsif d4 == 1 %}{% assign bg4 = "bg--gray-65" %}{% endif %}
+
+              <div class="grid grid--cols-4 gap--small mt--2">
+                <div class="rounded--small {{ bg1 }} p--2">
+                  <span class="label label--small label--gray">Tag</span>
+                  <span class="value value--small lg:value--base value--tnums">{{ d1 }}</span>
+                </div>
+
+                <div class="rounded--small {{ bg2 }} p--2">
+                  <span class="label label--small label--gray">+1</span>
+                  <span class="value value--small lg:value--base value--tnums">{{ d2 }}</span>
+                </div>
+
+                <div class="rounded--small {{ bg3 }} p--2">
+                  <span class="label label--small label--gray">+2</span>
+                  <span class="value value--small lg:value--base value--tnums">{{ d3 }}</span>
+                </div>
+
+                <div class="rounded--small {{ bg4 }} p--2">
+                  <span class="label label--small label--gray">+3</span>
+                  <span class="value value--small lg:value--base value--tnums">{{ d4 }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+</div>
+
+<div class="title_bar">
+  {% render 'share' %}
+  <span class="title">Pollenbelastung</span>
+  <span class="instance">polleninformation.at</span>
+</div>
