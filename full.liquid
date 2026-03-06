@@ -1,5 +1,5 @@
 {% assign entries = contamination | sort: "contamination_1" | reverse %}
-{% assign pollen_filter = trmnl.plugin_settings.custom_fields_values.pollen_filter | default: "" | strip %}
+{% assign pollen_filter = trmnl.plugin_settings.custom_fields_values.pollen_filter2 | default: "" | strip %}
 {% assign filter_list = pollen_filter | split: "," %}
 
 {% assign active_count = 0 %}
@@ -20,15 +20,15 @@
 
 <div class="layout layout--col gap--small lg:gap--base">
   {% if entries.size == 0 %}
-    <div class="flex flex--col flex--center flex--center-x gap stretch-x">
-      <span class="value value--xxxlarge">✕</span>
-      <span class="label label--xlarge">Keine Pollendaten verfügbar</span>
-    </div>
-  {% elsif active_count == 0 %}
-    <div class="flex flex--col flex--center flex--center-x gap stretch-x">
-      <span class="value value--xxxlarge">✓</span>
-      <span class="label label--xlarge">Keine Pollenbelastung</span>
-    </div>
+<div class="flex flex--col flex--center flex--center-x gap stretch-x">
+<span class="value value--xxxlarge lg:value--peta">✕</span>
+<span class="label label--xlarge lg:value--xlarge">Keine Pollendaten verfügbar</span>
+</div>
+{% elsif active_count == 0 %}
+<div class="flex flex--col flex--center flex--center-x gap stretch-x">
+<span class="value value--xxxlarge lg:value--peta">✓</span>
+<span class="label label--xlarge lg:value--xlarge">Keine Pollenbelastung</span>
+</div>
   {% else %}
     <div class="grid grid--cols-4 gap--small lg:gap--base stretch-x" data-overflow="true" data-overflow-counter="true">
       {% for entry in entries %}
@@ -77,22 +77,22 @@
               <div class="grid grid--cols-4 gap--small mt--2">
                 <div class="rounded--small {{ bg1 }} p--2">
                   <span class="label label--small label--gray">Tag</span>
-                  <span class="value value--small lg:value--base value--tnums">{{ d1 }}</span>
+                  <span class="value value--small lg:value--large value--tnums">{{ d1 }}</span>
                 </div>
 
                 <div class="rounded--small {{ bg2 }} p--2">
                   <span class="label label--small label--gray">+1</span>
-                  <span class="value value--small lg:value--base value--tnums">{{ d2 }}</span>
+                  <span class="value value--small lg:value--large value--tnums">{{ d2 }}</span>
                 </div>
 
                 <div class="rounded--small {{ bg3 }} p--2">
                   <span class="label label--small label--gray">+2</span>
-                  <span class="value value--small lg:value--base value--tnums">{{ d3 }}</span>
+                  <span class="value value--small lg:value--large value--tnums">{{ d3 }}</span>
                 </div>
 
                 <div class="rounded--small {{ bg4 }} p--2">
                   <span class="label label--small label--gray">+3</span>
-                  <span class="value value--small lg:value--base value--tnums">{{ d4 }}</span>
+                  <span class="value value--small lg:value--large value--tnums">{{ d4 }}</span>
                 </div>
               </div>
             </div>

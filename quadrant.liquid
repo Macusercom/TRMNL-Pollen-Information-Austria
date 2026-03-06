@@ -20,13 +20,13 @@
 <div class="layout layout--col gap--small">
   {% if entries.size == 0 %}
     <div class="flex flex--col flex--center flex--center-x gap stretch-x">
-      <span class="value value--xxlarge">✕</span>
-      <span class="label label--large">Keine Pollendaten verfügbar</span>
+      <span class="value value--xxlarge lg:value--xxxlarge">✕</span>
+      <span class="label label--large lg:label--xlarge">Keine Pollendaten verfügbar</span>
     </div>
   {% elsif active_count == 0 %}
     <div class="flex flex--col flex--center flex--center-x gap stretch-x">
-      <span class="value value--xxlarge">✓</span>
-      <span class="label label--large">Keine Pollenbelastung</span>
+      <span class="value value--xxlarge lg:value--xxxlarge">✓</span>
+      <span class="label label--large lg:label--xlarge">Keine Pollenbelastung</span>
     </div>
   {% else %}
     <div class="grid grid--cols-2 gap--small stretch-x" data-overflow="true" data-overflow-counter="true">
@@ -57,9 +57,9 @@
         <div class="item{{ emphasis }}">
           <div class="meta"></div>
           <div class="content">
-            <span class="title title--small" data-clamp="1">{{ entry.poll_title | split: " (" | first }}</span>
-            <span class="value value--small value--tnums">{{ d1 }}</span>
-            <span class="label label--small label--gray">
+            <span class="title title--small lg:title--base" data-clamp="1">{{ entry.poll_title | split: " (" | first }}</span>
+            <span class="value value--small value--tnums lg:value--large">{{ d1 }}</span>
+            <span class="label label--small label--gray lg:label--base">
               {% if d1 == 1 %}gering{% elsif d1 == 2 %}mäßig{% elsif d1 == 3 %}stark{% else %}sehr stark{% endif %}
             </span>
           </div>

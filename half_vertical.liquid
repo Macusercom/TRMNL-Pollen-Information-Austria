@@ -20,13 +20,13 @@
 <div class="layout layout--col gap--small lg:gap--base">
   {% if entries.size == 0 %}
     <div class="flex flex--col flex--center flex--center-x gap stretch-x">
-      <span class="value value--xxlarge">✕</span>
-      <span class="label label--large">Keine Pollendaten verfügbar</span>
+      <span class="value value--xxxlarge lg:value--peta lg:portrait:value--xxxlarge">✕</span>
+      <span class="label label--xlarge lg:label--xlarge">Keine Pollendaten verfügbar</span>
     </div>
   {% elsif active_count == 0 %}
     <div class="flex flex--col flex--center flex--center-x gap stretch-x">
-      <span class="value value--xxlarge">✓</span>
-      <span class="label label--large">Keine Pollenbelastung</span>
+      <span class="value value--xxxlarge lg:value--peta lg:portrait:value--xxxlarge">✓</span>
+      <span class="label label--xlarge lg:label--xlarge">Keine Pollenbelastung</span>
     </div>
   {% else %}
     <div class="grid grid--cols-2 gap--small lg:gap--base stretch-x" data-overflow="true" data-overflow-counter="true">
@@ -75,25 +75,25 @@
               {% assign bg4 = "bg--gray-75" %}
               {% if d4 >= 4 %}{% assign bg4 = "bg--gray-30" %}{% elsif d4 == 3 %}{% assign bg4 = "bg--gray-35" %}{% elsif d4 == 2 %}{% assign bg4 = "bg--gray-50" %}{% elsif d4 == 1 %}{% assign bg4 = "bg--gray-65" %}{% endif %}
 
-              <div class="grid grid--cols-4 gap--small mt--2">
+              <div class="grid grid--cols-4 gap--small mt--2 ">
                 <div class="rounded--small {{ bg1 }} p--2">
                   <span class="label label--small label--gray">Tag</span>
-                  <span class="value value--small lg:value--base value--tnums">{{ d1 }}</span>
+                  <span class="value value--small lg:value--large value--tnums">{{ d1 }}</span>
                 </div>
 
                 <div class="rounded--small {{ bg2 }} p--2">
                   <span class="label label--small label--gray">+1</span>
-                  <span class="value value--small lg:value--base value--tnums">{{ d2 }}</span>
+                  <span class="value value--small lg:value--large value--tnums">{{ d2 }}</span>
                 </div>
 
                 <div class="rounded--small {{ bg3 }} p--2">
                   <span class="label label--small label--gray">+2</span>
-                  <span class="value value--small lg:value--base value--tnums">{{ d3 }}</span>
+                  <span class="value value--small lg:value--large value--tnums">{{ d3 }}</span>
                 </div>
 
                 <div class="rounded--small {{ bg4 }} p--2">
                   <span class="label label--small label--gray">+3</span>
-                  <span class="value value--small lg:value--base value--tnums">{{ d4 }}</span>
+                  <span class="value value--small lg:value--large value--tnums">{{ d4 }}</span>
                 </div>
               </div>
             </div>
