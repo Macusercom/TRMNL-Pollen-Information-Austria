@@ -1,5 +1,5 @@
 {% assign entries = contamination | sort: "contamination_1" | reverse %}
-{% assign pollen_filter = trmnl.plugin_settings.custom_fields_values.pollen_filter2 | default: "" | strip %}
+{% assign pollen_filter = trmnl.plugin_settings.custom_fields_values.pollen_filter | default: "" | strip %}
 {% assign filter_list = pollen_filter | split: "," %}
 
 {% assign active_count = 0 %}
