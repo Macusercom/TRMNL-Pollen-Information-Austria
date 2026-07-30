@@ -44,7 +44,7 @@ custom_fields:
 - keyname: language
   field_type: select
   name: Language
-  description: Language for pollen names. Also controls the plugin's UI text for German and English; all other languages fall back to German UI text.
+  description: Language for pollen names. Also controls the plugin's UI text for German and English; all other languages fall back to English UI text.
   default: de
   options:
   - German: de

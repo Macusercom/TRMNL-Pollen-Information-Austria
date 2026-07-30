@@ -13,7 +13,7 @@ A TRMNL plug-in that displays current pollen levels for Austria using data from 
 ## Settings
 
 - **API Key** — free key from the Austrian Pollen Information Service (request one via the link in the plugin's About section). Fair use: please don't poll more than once every 4 hours.
-- **Country** / **Language** — location and language for pollen names. `Language` also switches the plugin's own UI text between German and English; all other languages fall back to German UI text.
+- **Country** / **Language** — location and language for pollen names. `Language` also switches the plugin's own UI text between German and English; all other languages fall back to English UI text.
 - **Latitude** / **Longitude** — your location, e.g. via [latlong.net](https://www.latlong.net).
 - **Minimum Severity** — hide pollen types below a chosen contamination level (default: hide zero-contamination entries).
 - **Pollen Filter** (optional) — comma-separated pollen names to show only those types; partial matches supported.

@@ -5,19 +5,7 @@
 {% assign min_severity = trmnl.plugin_settings.custom_fields_values.min_severity | default: "1" | plus: 0 %}
 
 {% assign lang = trmnl.plugin_settings.custom_fields_values.language | default: "de" %}
-{% if lang == "en" %}
-  {% assign t_no_data = "No pollen data available" %}
-  {% assign t_no_load = "No pollen exposure" %}
-  {% assign t_today = "Today" %}
-  {% assign t_sev_1 = "low" %}
-  {% assign t_sev_2 = "moderate" %}
-  {% assign t_sev_3 = "high" %}
-  {% assign t_sev_4 = "very high" %}
-  {% assign t_title_forecast = "Pollen Exposure" %}
-  {% assign t_title_today = "Pollen Exposure Today" %}
-  {% assign t_title_quadrant = "Pollen Today" %}
-  {% assign t_allergy_risk = "Allergy risk today" %}
-{% else %}
+{% if lang == "de" %}
   {% assign t_no_data = "Keine Pollendaten verfügbar" %}
   {% assign t_no_load = "Keine Pollenbelastung" %}
   {% assign t_today = "Tag" %}
@@ -29,6 +17,18 @@
   {% assign t_title_today = "Pollenbelastung heute" %}
   {% assign t_title_quadrant = "Pollen heute" %}
   {% assign t_allergy_risk = "Allergierisiko heute" %}
+{% else %}
+  {% assign t_no_data = "No pollen data available" %}
+  {% assign t_no_load = "No pollen exposure" %}
+  {% assign t_today = "Today" %}
+  {% assign t_sev_1 = "low" %}
+  {% assign t_sev_2 = "moderate" %}
+  {% assign t_sev_3 = "high" %}
+  {% assign t_sev_4 = "very high" %}
+  {% assign t_title_forecast = "Pollen Exposure" %}
+  {% assign t_title_today = "Pollen Exposure Today" %}
+  {% assign t_title_quadrant = "Pollen Today" %}
+  {% assign t_allergy_risk = "Allergy risk today" %}
 {% endif %}
 
 {% assign t_instance = "polleninformation.at" %}
