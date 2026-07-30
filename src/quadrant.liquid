@@ -1,5 +1,10 @@
 <div class="layout layout--col gap--small">
-  {% if entries.size == 0 %}
+  {% if api_error != "" %}
+    <div class="flex flex--col flex--center flex--center-x gap stretch-x">
+      <span class="value value--xxlarge lg:value--xxxlarge">!</span>
+      <span class="label label--large lg:label--xlarge">{{ api_error_headline }}</span>
+    </div>
+  {% elsif entries.size == 0 %}
     <div class="flex flex--col flex--center flex--center-x gap stretch-x">
       <span class="value value--xxlarge lg:value--xxxlarge">✕</span>
       <span class="label label--large lg:label--xlarge">{{ t_no_data }}</span>
@@ -41,7 +46,7 @@
             <span class="title title--small lg:title--base" data-clamp="1">{{ entry.poll_title | split: " (" | first }}</span>
             <span class="value value--small value--tnums lg:value--large">{{ d1 }}</span>
             <span class="label label--small lg:label--base">
-              {% if d1 == 1 %}{{ t_sev_1 }}{% elsif d1 == 2 %}{{ t_sev_2 }}{% elsif d1 == 3 %}{{ t_sev_3 }}{% else %}{{ t_sev_4 }}{% endif %}
+              {% if d1 == 0 %}{{ t_sev_0 }}{% elsif d1 == 1 %}{{ t_sev_1 }}{% elsif d1 == 2 %}{{ t_sev_2 }}{% elsif d1 == 3 %}{{ t_sev_3 }}{% else %}{{ t_sev_4 }}{% endif %}
             </span>
           </div>
         </div>
@@ -53,5 +58,5 @@
 <div class="title_bar">
   <img class="image" src="{{ title_bar_icon }}">
   <span class="title">{{ t_title_quadrant }}</span>
-  <span class="instance">{{ t_instance }}</span>
+  <span class="instance">{{ t_instance_short }}</span>
 </div>

@@ -9,6 +9,7 @@
   {% assign t_no_data = "Keine Pollendaten verfügbar" %}
   {% assign t_no_load = "Keine Pollenbelastung" %}
   {% assign t_today = "Tag" %}
+  {% assign t_sev_0 = "keine" %}
   {% assign t_sev_1 = "gering" %}
   {% assign t_sev_2 = "mäßig" %}
   {% assign t_sev_3 = "stark" %}
@@ -17,10 +18,13 @@
   {% assign t_title_today = "Pollenbelastung heute" %}
   {% assign t_title_quadrant = "Pollen heute" %}
   {% assign t_allergy_risk = "Allergierisiko heute" %}
+  {% assign t_api_error = "API-Fehler" %}
+  {% assign t_api_key_error = "API-Key prüfen" %}
 {% else %}
   {% assign t_no_data = "No pollen data available" %}
   {% assign t_no_load = "No pollen exposure" %}
   {% assign t_today = "Today" %}
+  {% assign t_sev_0 = "none" %}
   {% assign t_sev_1 = "low" %}
   {% assign t_sev_2 = "moderate" %}
   {% assign t_sev_3 = "high" %}
@@ -29,14 +33,22 @@
   {% assign t_title_today = "Pollen Exposure Today" %}
   {% assign t_title_quadrant = "Pollen Today" %}
   {% assign t_allergy_risk = "Allergy risk today" %}
+  {% assign t_api_error = "API error" %}
+  {% assign t_api_key_error = "Check API key" %}
 {% endif %}
 
-{% assign t_instance = "polleninformation.at" %}
+{% assign t_instance_full = "Österreichischer Polleninformationsdienst, www.polleninformation.at" %}
+{% assign t_instance_short = "polleninformation.at" %}
 {% assign ar1 = allergyrisk.allergyrisk_1 %}
+
+{% assign api_error = error | default: "" | strip %}
+{% assign api_error_headline = t_api_error %}
+{% if api_error contains "api key" %}{% assign api_error_headline = t_api_key_error %}{% endif %}
 
 {% assign active_count = 0 %}
 {% for entry in entries %}
-  {% if entry.contamination_1 < min_severity %}{% continue %}{% endif %}
+  {% assign entry_d1 = entry.contamination_1 | default: 0 | plus: 0 %}
+  {% if entry_d1 < min_severity %}{% continue %}{% endif %}
   {% if pollen_filter != "" %}
     {% assign entry_name = entry.poll_title | split: " (" | first | downcase %}
     {% assign match = false %}

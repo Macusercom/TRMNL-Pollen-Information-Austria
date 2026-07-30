@@ -5,7 +5,13 @@
       <span class="value value--small value--tnums">{{ ar1 }}</span>
     </div>
   {% endif %}
-  {% if entries.size == 0 %}
+  {% if api_error != "" %}
+    <div class="flex flex--col flex--center flex--center-x gap stretch-x">
+      <span class="value value--xxxlarge lg:value--peta lg:portrait:value--xxxlarge">!</span>
+      <span class="label label--xlarge lg:label--xlarge">{{ api_error_headline }}</span>
+      <span class="label label--small">{{ api_error }}</span>
+    </div>
+  {% elsif entries.size == 0 %}
     <div class="flex flex--col flex--center flex--center-x gap stretch-x">
       <span class="value value--xxxlarge lg:value--peta lg:portrait:value--xxxlarge">✕</span>
       <span class="label label--xlarge lg:label--xlarge">{{ t_no_data }}</span>
@@ -95,5 +101,5 @@
 <div class="title_bar">
   <img class="image" src="{{ title_bar_icon }}">
   <span class="title">{{ t_title_forecast }}</span>
-  <span class="instance">{{ t_instance }}</span>
+  <span class="instance">{{ t_instance_short }}</span>
 </div>
