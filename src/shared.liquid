@@ -15,7 +15,7 @@
   {% assign t_sev_4 = "very high" %}
   {% assign t_title_forecast = "Pollen Exposure" %}
   {% assign t_title_today = "Pollen Exposure Today" %}
-  {% assign t_instance = "Austrian Pollen Information Service (polleninformation.at)" %}
+  {% assign t_title_quadrant = "Pollen Today" %}
   {% assign t_allergy_risk = "Allergy risk today" %}
 {% else %}
   {% assign t_no_data = "Keine Pollendaten verfügbar" %}
@@ -27,10 +27,11 @@
   {% assign t_sev_4 = "sehr stark" %}
   {% assign t_title_forecast = "Pollenbelastung" %}
   {% assign t_title_today = "Pollenbelastung heute" %}
-  {% assign t_instance = "Österreichischer Polleninformationsdienst (polleninformation.at)" %}
+  {% assign t_title_quadrant = "Pollen heute" %}
   {% assign t_allergy_risk = "Allergierisiko heute" %}
 {% endif %}
 
+{% assign t_instance = "polleninformation.at" %}
 {% assign ar1 = allergyrisk.allergyrisk_1 %}
 
 {% assign active_count = 0 %}
