@@ -1,4 +1,4 @@
-<img src="icon.png" alt="icon" height="100">
+<img src="images/icon.png" alt="icon" height="100">
 
 # TRMNL Pollen Information Austria
 <img src="images/image1.png" alt="Image 1" width="400">

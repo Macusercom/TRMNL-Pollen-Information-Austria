@@ -1,33 +1,13 @@
-{% assign entries = contamination | sort: "contamination_1" | reverse %}
-{% assign pollen_filter = trmnl.plugin_settings.custom_fields_values.pollen_filter | default: "" | strip %}
-{% assign filter_list = pollen_filter | split: "," %}
-
-{% assign active_count = 0 %}
-{% for entry in entries %}
-  {% if entry.contamination_1 == 0 %}{% continue %}{% endif %}
-  {% if pollen_filter != "" %}
-    {% assign entry_name = entry.poll_title | split: " (" | first | downcase %}
-    {% assign match = false %}
-    {% for f in filter_list %}
-      {% assign f_clean = f | strip | downcase %}
-      {% if entry_name contains f_clean %}{% assign match = true %}{% endif %}
-    {% endfor %}
-    {% unless match %}{% continue %}{% endunless %}
-  {% endif %}
-  {% assign active_count = active_count | plus: 1 %}
-{% endfor %}
-
-
 <div class="layout layout--col gap--small lg:gap--base">
   {% if entries.size == 0 %}
 <div class="flex flex--col flex--center flex--center-x gap stretch-x">
 <span class="value value--xxxlarge lg:value--peta">✕</span>
-<span class="label label--xlarge lg:value--xlarge">Keine Pollendaten verfügbar</span>
+<span class="label label--xlarge lg:label--xlarge">Keine Pollendaten verfügbar</span>
 </div>
 {% elsif active_count == 0 %}
 <div class="flex flex--col flex--center flex--center-x gap stretch-x">
 <span class="value value--xxxlarge lg:value--peta">✓</span>
-<span class="label label--xlarge lg:value--xlarge">Keine Pollenbelastung</span>
+<span class="label label--xlarge lg:label--xlarge">Keine Pollenbelastung</span>
 </div>
   {% else %}
     <div class="grid grid--cols-4 gap--small lg:gap--base stretch-x" data-overflow="true" data-overflow-counter="true">
@@ -36,6 +16,8 @@
         {% assign d2 = entry.contamination_2 | default: 0 | plus: 0 %}
         {% assign d3 = entry.contamination_3 | default: 0 | plus: 0 %}
         {% assign d4 = entry.contamination_4 | default: 0 | plus: 0 %}
+
+        {% if d1 == 0 %}{% continue %}{% endif %}
 
         {% if pollen_filter != "" %}
           {% assign entry_name = entry.poll_title | split: " (" | first | downcase %}
@@ -76,22 +58,22 @@
 
               <div class="grid grid--cols-4 gap--small mt--2">
                 <div class="rounded--small {{ bg1 }} p--2">
-                  <span class="label label--small label--gray">Tag</span>
+                  <span class="label label--small label--gray 1bit:text--black">Tag</span>
                   <span class="value value--small lg:value--large value--tnums">{{ d1 }}</span>
                 </div>
 
                 <div class="rounded--small {{ bg2 }} p--2">
-                  <span class="label label--small label--gray">+1</span>
+                  <span class="label label--small label--gray 1bit:text--black">+1</span>
                   <span class="value value--small lg:value--large value--tnums">{{ d2 }}</span>
                 </div>
 
                 <div class="rounded--small {{ bg3 }} p--2">
-                  <span class="label label--small label--gray">+2</span>
+                  <span class="label label--small label--gray 1bit:text--black">+2</span>
                   <span class="value value--small lg:value--large value--tnums">{{ d3 }}</span>
                 </div>
 
                 <div class="rounded--small {{ bg4 }} p--2">
-                  <span class="label label--small label--gray">+3</span>
+                  <span class="label label--small label--gray 1bit:text--black">+3</span>
                   <span class="value value--small lg:value--large value--tnums">{{ d4 }}</span>
                 </div>
               </div>

@@ -1,0 +1,17 @@
+---
+# Local dev-server config — not uploaded to TRMNL
+watch:
+  - src
+  - .trmnlp.yml
+
+time_zone: Europe/Vienna
+
+# Preset values so every option can be tried locally without typing them in TRMNL.
+# The API key comes from the environment — never commit it.
+custom_fields:
+  apikey: "{{ env.POLLEN_API_KEY }}"
+  country: "AT"
+  language: "de"
+  latitude: "48.208568007182656"
+  longitude: "16.36887579211063"
+  pollen_filter: ""
