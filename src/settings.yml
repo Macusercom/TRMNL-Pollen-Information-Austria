@@ -44,7 +44,7 @@ custom_fields:
 - keyname: language
   field_type: select
   name: Language
-  description: Language for pollen names
+  description: Language for pollen names. Also controls the plugin's UI text for German and English; all other languages fall back to German UI text.
   default: de
   options:
   - German: de
@@ -67,13 +67,13 @@ custom_fields:
   field_type: string
   name: Latitude
   description: Latitude of your location
-  placeholder: 48.20671631686089
+  placeholder: 48.208493
   help_text: Go to <a href="https://www.latlong.net" target="_blank">latlong.net</a>, search for your location and copy the latitude.
 - keyname: longitude
   field_type: string
   name: Longitude
   description: Longitude of your location
-  placeholder: 16.350157610474536
+  placeholder: 16.373118
   help_text: Go to <a href="https://www.latlong.net" target="_blank">latlong.net</a>, search for your location and copy the longitude.
 - keyname: pollen_filter
   field_type: multi_string
@@ -82,5 +82,16 @@ custom_fields:
   placeholder: Birke, Esche, Gräser
   description: Only show selected pollen types. Leave empty to show all.
   help_text: Enter pollen names in your selected language, separated by commas. Partial matches are supported (e.g. "Bir" matches "Birke").
+- keyname: min_severity
+  field_type: select
+  name: Minimum Severity
+  description: Only show pollen types at or above this contamination level
+  default: "1"
+  options:
+  - Show all (including 0): "0"
+  - Low and above (1+): "1"
+  - Moderate and above (2+): "2"
+  - High and above (3+): "3"
+  - Very high only (4+): "4"
 name: Pollen Information Austria
 refresh_interval: 1440
