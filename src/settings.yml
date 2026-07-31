@@ -80,7 +80,7 @@ custom_fields:
   name: Pollen Filter (optional)
   optional: true
   placeholder: Birke, Esche, Gräser
-  description: Only show selected pollen types. Leave empty to show all.
+  description: Only show selected pollen types. Enter one line per field, leave empty to show all.
   help_text: Enter pollen names in your selected language, separated by commas. Partial matches are supported (e.g. "Bir" matches "Birke").
 - keyname: min_severity
   field_type: select
