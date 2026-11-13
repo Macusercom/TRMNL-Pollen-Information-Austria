@@ -7,15 +7,15 @@ watch:
 time_zone: Europe/Vienna
 
 # Preset values so every option can be tried locally without typing them in TRMNL.
-# The API key comes from the environment — never commit it. Same for latitude/longitude:
+# The API key comes from the environment — never commit it. Same for the location:
 # the committed defaults are a public landmark (Stephansdom, Vienna), not a real address.
 # Set POLLEN_LATITUDE/POLLEN_LONGITUDE locally (e.g. in ~/.zshrc) to test with your own
-# location without ever committing it.
+# location without ever committing it. They are joined into the "lat,lon" string that
+# TRMNL's lat_lon field produces.
 custom_fields:
   apikey: "{{ env.POLLEN_API_KEY }}"
   country: "AT"
   language: "de"
-  latitude: "{{ env.POLLEN_LATITUDE | default: '48.208493' }}"
-  longitude: "{{ env.POLLEN_LONGITUDE | default: '16.373118' }}"
+  location: "{{ env.POLLEN_LATITUDE | default: '48.208493' }},{{ env.POLLEN_LONGITUDE | default: '16.373118' }}"
   pollen_filter: ""
   min_severity: "1"
