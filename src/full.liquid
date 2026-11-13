@@ -1,103 +1,46 @@
-<div class="layout layout--col gap--small lg:gap--base">
-  {% if ar1 %}
-    <div class="flex flex--center-y gap--small stretch-x mb--2">
-      <span class="label label--small">{{ t_allergy_risk }}</span>
-      <span class="value value--small value--tnums">{{ ar1 }}</span>
-    </div>
-  {% endif %}
+{% comment %} Fewer pollen types get bigger rows that fill the screen; many get compact rows and overflow. {% endcomment %}
+{% assign fill = false %}
+{% if active_count <= 2 %}
+  {% assign fill = true %}
+  {% assign title_class = "title--large lg:title--xxlarge" %}
+  {% assign value_class = "value--xxlarge lg:value--mega" %}
+  {% assign risk_value_class = "value--xlarge lg:value--xxlarge" %}
+{% elsif active_count <= 4 %}
+  {% assign title_class = "title--base lg:title--xlarge" %}
+  {% assign value_class = "value--large lg:value--xxlarge" %}
+  {% assign risk_value_class = value_class %}
+{% else %}
+  {% assign title_class = "title--small lg:title--base" %}
+  {% assign value_class = "value--small lg:value--large" %}
+  {% assign risk_value_class = value_class %}
+{% endif %}
+
+<div class="layout layout--col layout--top gap--small">
   {% if api_error != "" %}
-<div class="flex flex--col flex--center flex--center-x gap stretch-x">
-<span class="value value--xxxlarge lg:value--peta">!</span>
-<span class="label label--xlarge lg:label--xlarge">{{ api_error_headline }}</span>
-<span class="label label--small">{{ api_error }}</span>
-</div>
-{% elsif entries.size == 0 %}
-<div class="flex flex--col flex--center flex--center-x gap stretch-x">
-<span class="value value--xxxlarge lg:value--peta">✕</span>
-<span class="label label--xlarge lg:label--xlarge">{{ t_no_data }}</span>
-</div>
-{% elsif active_count == 0 %}
-<div class="flex flex--col flex--center flex--center-x gap stretch-x">
-<span class="value value--xxxlarge lg:value--peta">✓</span>
-<span class="label label--xlarge lg:label--xlarge">{{ t_no_load }}</span>
-</div>
+    {% render "state", symbol: "!", headline: api_error_headline, detail: api_error, symbol_class: "value--xxxlarge lg:value--peta", label_class: "label--xlarge lg:label--xxlarge" %}
+  {% elsif entries.size == 0 %}
+    {% render "state", symbol: "✕", headline: t_no_data, detail: "", symbol_class: "value--xxxlarge lg:value--peta", label_class: "label--xlarge lg:label--xxlarge" %}
   {% else %}
-    <div class="grid grid--cols-4 gap--small lg:gap--base stretch-x" data-overflow="true" data-overflow-counter="true">
+    {% render "risk_row", allergyrisk: allergyrisk, day_labels: day_labels, t_allergy_risk: t_allergy_risk, t_risk_scale: t_risk_scale, title_class: title_class, value_class: risk_value_class, stacked: false %}
+    <div class="divider"></div>
+    {% if active_count == 0 %}
+      {% render "state", symbol: "✓", headline: t_no_load, detail: "", symbol_class: "value--xxlarge lg:value--giga", label_class: "label--large lg:label--xlarge" %}
+    {% else %}
+      {% if fill %}
+        <div class="flex flex--col gap--small w--full stretch-y">
+      {% else %}
+        <div class="columns w--full stretch-y" data-overflow-max-cols="1" data-overflow-counter="true">
+          <div class="column">
+      {% endif %}
       {% for entry in entries %}
-        {% assign d1 = entry.contamination_1 | default: 0 | plus: 0 %}
-        {% assign d2 = entry.contamination_2 | default: 0 | plus: 0 %}
-        {% assign d3 = entry.contamination_3 | default: 0 | plus: 0 %}
-        {% assign d4 = entry.contamination_4 | default: 0 | plus: 0 %}
-
-        {% if d1 < min_severity %}{% continue %}{% endif %}
-
-        {% if pollen_filter != "" %}
-          {% assign entry_name = entry.poll_title | split: " (" | first | downcase %}
-          {% assign match = false %}
-          {% for f in filter_list %}
-            {% assign f_clean = f | strip | downcase %}
-            {% if entry_name contains f_clean %}{% assign match = true %}{% endif %}
-          {% endfor %}
-          {% unless match %}{% continue %}{% endunless %}
-        {% endif %}
-
-        {% assign emphasis = "" %}
-        {% if d1 >= 3 %}
-          {% assign emphasis = " item--emphasis-3" %}
-        {% elsif d1 == 2 %}
-          {% assign emphasis = " item--emphasis-2" %}
-        {% endif %}
-
-        <div class="item{{ emphasis }}">
-          <div class="meta"></div>
-
-          <div class="content">
-            <div>
-              <span class="title title--small lg:title--base" data-clamp="1">
-                {{ entry.poll_title | split: " (" | first }}
-              </span>
-
-              {% assign bg1 = "bg--gray-75" %}
-              {% if d1 >= 4 %}{% assign bg1 = "bg--gray-30" %}{% elsif d1 == 3 %}{% assign bg1 = "bg--gray-35" %}{% elsif d1 == 2 %}{% assign bg1 = "bg--gray-50" %}{% elsif d1 == 1 %}{% assign bg1 = "bg--gray-65" %}{% endif %}
-              {% assign bg2 = "bg--gray-75" %}
-              {% if d2 >= 4 %}{% assign bg2 = "bg--gray-30" %}{% elsif d2 == 3 %}{% assign bg2 = "bg--gray-35" %}{% elsif d2 == 2 %}{% assign bg2 = "bg--gray-50" %}{% elsif d2 == 1 %}{% assign bg2 = "bg--gray-65" %}{% endif %}
-              {% assign bg3 = "bg--gray-75" %}
-              {% if d3 >= 4 %}{% assign bg3 = "bg--gray-30" %}{% elsif d3 == 3 %}{% assign bg3 = "bg--gray-35" %}{% elsif d3 == 2 %}{% assign bg3 = "bg--gray-50" %}{% elsif d3 == 1 %}{% assign bg3 = "bg--gray-65" %}{% endif %}
-              {% assign bg4 = "bg--gray-75" %}
-              {% if d4 >= 4 %}{% assign bg4 = "bg--gray-30" %}{% elsif d4 == 3 %}{% assign bg4 = "bg--gray-35" %}{% elsif d4 == 2 %}{% assign bg4 = "bg--gray-50" %}{% elsif d4 == 1 %}{% assign bg4 = "bg--gray-65" %}{% endif %}
-
-              <div class="grid grid--cols-4 gap--small mt--2">
-                <div class="rounded--small {{ bg1 }} p--2">
-                  <span class="label label--small">{{ t_today }}</span>
-                  <span class="value value--small lg:value--large value--tnums">{{ d1 }}</span>
-                </div>
-
-                <div class="rounded--small {{ bg2 }} p--2">
-                  <span class="label label--small">+1</span>
-                  <span class="value value--small lg:value--large value--tnums">{{ d2 }}</span>
-                </div>
-
-                <div class="rounded--small {{ bg3 }} p--2">
-                  <span class="label label--small">+2</span>
-                  <span class="value value--small lg:value--large value--tnums">{{ d3 }}</span>
-                </div>
-
-                <div class="rounded--small {{ bg4 }} p--2">
-                  <span class="label label--small">+3</span>
-                  <span class="value value--small lg:value--large value--tnums">{{ d4 }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {% assign entry_key = entry.poll_id | prepend: "," | append: "," %}
+        {% unless shown_ids contains entry_key %}{% continue %}{% endunless %}
+        {% render "pollen_row", entry: entry, sev_labels: t_sev, title_class: title_class, value_class: value_class, fill: fill, stacked: false %}
       {% endfor %}
-    </div>
+      {% unless fill %}</div>{% endunless %}
+      </div>
+    {% endif %}
   {% endif %}
-
 </div>
 
-<div class="title_bar">
-  <img class="image" src="{{ title_bar_icon }}">
-  <span class="title">{{ t_title_forecast }}</span>
-  <span class="instance">{{ t_instance_full }}</span>
-</div>
+{% render "title_bar", icon: title_bar_icon, title: t_title_forecast, instance: t_instance_full %}

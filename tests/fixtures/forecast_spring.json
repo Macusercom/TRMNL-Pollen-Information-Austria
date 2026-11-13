@@ -1,0 +1,220 @@
+{
+  "contamination": [
+    {
+      "poll_id": 1,
+      "poll_title": "Erle (Alnus)",
+      "contamination_1": 3,
+      "contamination_2": 3,
+      "contamination_3": 3,
+      "contamination_4": 3
+    },
+    {
+      "poll_id": 3,
+      "poll_title": "Hasel (Corylus)",
+      "contamination_1": 2,
+      "contamination_2": 2,
+      "contamination_3": 1,
+      "contamination_4": 1
+    },
+    {
+      "poll_id": 4,
+      "poll_title": "Esche (Fraxinus)",
+      "contamination_1": 1,
+      "contamination_2": 1,
+      "contamination_3": 1,
+      "contamination_4": 2
+    },
+    {
+      "poll_id": 17,
+      "poll_title": "Zypressengewächse (Cupressaceae)",
+      "contamination_1": 1,
+      "contamination_2": 1,
+      "contamination_3": 1,
+      "contamination_4": 1
+    },
+    {
+      "poll_id": 2,
+      "poll_title": "Birke (Betula)",
+      "contamination_1": 0,
+      "contamination_2": 0,
+      "contamination_3": 0,
+      "contamination_4": 0
+    },
+    {
+      "poll_id": 16,
+      "poll_title": "Platane (Platanus)",
+      "contamination_1": 0,
+      "contamination_2": 0,
+      "contamination_3": 0,
+      "contamination_4": 0
+    },
+    {
+      "poll_id": 5,
+      "poll_title": "Gräser (Poaceae)",
+      "contamination_1": 0,
+      "contamination_2": 0,
+      "contamination_3": 0,
+      "contamination_4": 0
+    },
+    {
+      "poll_id": 291,
+      "poll_title": "Roggen (Secale)",
+      "contamination_1": 0,
+      "contamination_2": 0,
+      "contamination_3": 0,
+      "contamination_4": 0
+    },
+    {
+      "poll_id": 15,
+      "poll_title": "Nessel- und Glaskraut (Urticaceae)",
+      "contamination_1": 0,
+      "contamination_2": 0,
+      "contamination_3": 0,
+      "contamination_4": 0
+    },
+    {
+      "poll_id": 18,
+      "poll_title": "Ölbaum (Olea)",
+      "contamination_1": 0,
+      "contamination_2": 0,
+      "contamination_3": 0,
+      "contamination_4": 0
+    },
+    {
+      "poll_id": 7,
+      "poll_title": "Beifuß (Artemisia)",
+      "contamination_1": 0,
+      "contamination_2": 0,
+      "contamination_3": 0,
+      "contamination_4": 0
+    },
+    {
+      "poll_id": 6,
+      "poll_title": "Ragweed (Ambrosia)",
+      "contamination_1": 0,
+      "contamination_2": 0,
+      "contamination_3": 0,
+      "contamination_4": 0
+    },
+    {
+      "poll_id": 23,
+      "poll_title": "Pilzsporen (Alternaria)",
+      "contamination_1": 0,
+      "contamination_2": 0,
+      "contamination_3": 0,
+      "contamination_4": 0
+    }
+  ],
+  "allergyrisk": {
+    "allergyrisk_1": 9,
+    "allergyrisk_2": 8,
+    "allergyrisk_3": 8,
+    "allergyrisk_4": 8
+  },
+  "allergyrisk_hourly": {
+    "allergyrisk_hourly_1": [
+      8,
+      8,
+      9,
+      9,
+      9,
+      9,
+      8,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
+    "allergyrisk_hourly_2": [
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "allergyrisk_hourly_3": [
+      8,
+      8,
+      7,
+      6,
+      7,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8
+    ],
+    "allergyrisk_hourly_4": [
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      7,
+      7,
+      6,
+      6,
+      5,
+      5
+    ]
+  }
+}
