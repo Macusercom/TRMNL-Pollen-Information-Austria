@@ -15,7 +15,7 @@ custom_fields:
   category: nature,life
   description: 'Shows current pollen contamination for your location for today and the next 3 days.<br/><br/>To use this plugin you need a free API key. Request one here: <a href="https://www.polleninformation.at/datenschnittstelle/api-key-anfordern" target="_blank">polleninformation.at/datenschnittstelle/api-key-anfordern</a><br/><br/>Data provided by Österreichischer Polleninformationsdienst, <a href="https://www.polleninformation.at" target="_blank">www.polleninformation.at</a>'
   learn_more_url: https://www.polleninformation.at/datenschnittstelle/api-key-anfordern
-  github_url: https://github.com/macusercom
+  github_url: https://github.com/Macusercom/TRMNL-Pollen-Information-Austria
 - keyname: apikey
   field_type: password
   name: API Key
