@@ -1,7 +1,7 @@
 <img src="images/icon.png" alt="icon" height="100">
 
 # TRMNL Pollen Information Austria
-<img src="images/image1.png" alt="Image 1" width="400">
+<img src="images/image1.png" alt="Full view on TRMNL OG" width="400"> <img src="images/image2.png" alt="Full view on TRMNL X" width="400">
 
 
 A TRMNL plug-in that displays current pollen levels for Austria using data from the Österreichischer Polleninformationsdienst. Shows the allergy risk and each pollen type's level for today and the next 3 days, with optional filtering by pollen name.
