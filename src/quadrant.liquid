@@ -1,9 +1,9 @@
 {% comment %} Today only, in a quarter of the screen: the allergy risk and the strongest pollen types. {% endcomment %}
 {% if today_cards <= 2 %}
-  {% assign title_class = "title--small lg:title--large" %}
+  {% assign title_class = "title--small lg:title--large lg:portrait:title--base" %}
   {% assign value_class = "value--large lg:value--xxlarge" %}
 {% else %}
-  {% assign title_class = "title--small lg:title--base" %}
+  {% assign title_class = "title--small lg:title--base lg:portrait:title--small" %}
   {% assign value_class = "value--small lg:value--large" %}
 {% endif %}
 

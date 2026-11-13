@@ -7,11 +7,11 @@
   {% assign risk_value_class = "value--xlarge lg:value--xxlarge" %}
 {% elsif active_count <= 4 %}
   {% assign title_class = "title--base lg:title--xlarge" %}
-  {% assign value_class = "value--large lg:value--xxlarge" %}
+  {% assign value_class = "value--base lg:value--xxlarge lg:portrait:value--xlarge" %}
   {% assign risk_value_class = value_class %}
 {% else %}
   {% assign title_class = "title--small lg:title--base" %}
-  {% assign value_class = "value--small lg:value--large" %}
+  {% assign value_class = "value--small lg:value--base" %}
   {% assign risk_value_class = value_class %}
 {% endif %}
 

@@ -49,7 +49,7 @@
     assign t_tomorrow = "Demain"
     assign t_weekdays = "Dim,Lun,Mar,Mer,Jeu,Ven,Sam" | split: ","
     assign t_sev = "aucun,faible,modéré,fort,très fort" | split: ","
-    assign t_title_forecast = "Exposition aux pollens"
+    assign t_title_forecast = "Pollens"
     assign t_title_today = "Pollens aujourd'hui"
     assign t_title_quadrant = "Pollens aujourd'hui"
     assign t_allergy_risk = "Risque allergique"
@@ -175,9 +175,9 @@
     assign t_tomorrow = "Rīt"
     assign t_weekdays = "Sv,Pr,Ot,Tr,Ce,Pk,Se" | split: ","
     assign t_sev = "nav,zema,vidēja,augsta,ļoti augsta" | split: ","
-    assign t_title_forecast = "Ziedputekšņu slodze"
-    assign t_title_today = "Ziedputekšņu slodze šodien"
-    assign t_title_quadrant = "Ziedputekšņi šodien"
+    assign t_title_forecast = "Ziedputekšņi"
+    assign t_title_today = "Ziedputekšņi šodien"
+    assign t_title_quadrant = "Putekšņi šodien"
     assign t_allergy_risk = "Alerģijas risks"
     assign t_risk_scale = "no 10"
     assign t_api_error = "API kļūda"
@@ -193,9 +193,9 @@
     assign t_tomorrow = "Rytoj"
     assign t_weekdays = "Sk,Pr,An,Tr,Kt,Pn,Št" | split: ","
     assign t_sev = "nėra,maža,vidutinė,didelė,labai didelė" | split: ","
-    assign t_title_forecast = "Žiedadulkių koncentracija"
+    assign t_title_forecast = "Žiedadulkės"
     assign t_title_today = "Žiedadulkės šiandien"
-    assign t_title_quadrant = "Žiedadulkės šiandien"
+    assign t_title_quadrant = "Žiedadulkės"
     assign t_allergy_risk = "Alergijos rizika"
     assign t_risk_scale = "iš 10"
     assign t_api_error = "API klaida"
@@ -211,7 +211,7 @@
     assign t_tomorrow = "Завтра"
     assign t_weekdays = "Вс,Пн,Вт,Ср,Чт,Пт,Сб" | split: ","
     assign t_sev = "нет,низкий,умеренный,высокий,очень высокий" | split: ","
-    assign t_title_forecast = "Концентрация пыльцы"
+    assign t_title_forecast = "Пыльца"
     assign t_title_today = "Пыльца сегодня"
     assign t_title_quadrant = "Пыльца сегодня"
     assign t_allergy_risk = "Риск аллергии"
@@ -229,7 +229,7 @@
     assign t_tomorrow = "Завтра"
     assign t_weekdays = "Нд,Пн,Вт,Ср,Чт,Пт,Сб" | split: ","
     assign t_sev = "немає,низький,помірний,високий,дуже високий" | split: ","
-    assign t_title_forecast = "Концентрація пилку"
+    assign t_title_forecast = "Пилок"
     assign t_title_today = "Пилок сьогодні"
     assign t_title_quadrant = "Пилок сьогодні"
     assign t_allergy_risk = "Ризик алергії"
@@ -395,19 +395,23 @@
   <div class="meta bg--white"></div>
   <div class="content grow gap--small">
     {% if stacked %}
-      {% if show_risk %}<div class="flex flex--col flex--left">{% render "row_name", name: t_allergy_risk, caption: t_risk_scale, title_class: title_class %}</div>{% endif %}
+      {% if show_risk %}<div class="flex flex--row flex--left flex--center-y gap--small">{% render "row_name", name: t_allergy_risk, caption: t_risk_scale, title_class: title_class %}</div>{% endif %}
       <div class="grid grid--cols-4 gap--small">
     {% else %}
-      {% if show_risk %}<div class="hidden portrait:flex flex--col flex--left">{% render "row_name", name: t_allergy_risk, caption: t_risk_scale, title_class: title_class %}</div>{% endif %}
+      {% if show_risk %}<div class="hidden portrait:flex flex--row flex--left flex--center-y gap--small">{% render "row_name", name: t_allergy_risk, caption: t_risk_scale, title_class: title_class %}</div>{% endif %}
       <div class="grid grid--cols-6 portrait:grid--cols-4 gap--small">
         <div class="flex flex--col flex--left flex--center-y col--span-2 portrait:hidden">{% if show_risk %}{% render "row_name", name: t_allergy_risk, caption: t_risk_scale, title_class: title_class %}{% endif %}</div>
     {% endif %}
       {% for i in (1..4) %}
         {% assign key = "allergyrisk_" | append: i %}
         {% assign label_index = i | minus: 1 %}
-        <div class="flex flex--col flex--center-x{% if show_risk %} p--1 lg:p--2{% endif %}">
+        <div class="flex flex--col flex--center-x gap--xsmall">
           <span class="label label--small 1bit:text--black">{{ day_labels[label_index] }}</span>
-          {% if show_risk %}<span class="value {{ value_class }} value--tnums">{{ allergyrisk[key] | default: 0 }}</span>{% endif %}
+          {% if show_risk %}
+            <div class="flex flex--col flex--center-x flex--center-y outline w--full p--1 lg:p--2">
+              <span class="value {{ value_class }} value--tnums">{{ allergyrisk[key] | default: 0 }}</span>
+            </div>
+          {% endif %}
         </div>
       {% endfor %}
     </div>
@@ -424,24 +428,27 @@
   <div class="meta"></div>
   <div class="content grow gap--small">
     {% if stacked %}
-      <div class="flex flex--col flex--left">{% render "row_name", name: name, caption: sev_labels[d1], title_class: title_class %}</div>
+      <div class="flex flex--row flex--left flex--center-y gap--small">{% render "row_name", name: name, caption: sev_labels[d1], title_class: title_class %}</div>
       <div class="grid grid--cols-4 gap--small{% if fill %} grow{% endif %}">
     {% else %}
-      <div class="hidden portrait:flex flex--col flex--left">{% render "row_name", name: name, caption: sev_labels[d1], title_class: title_class %}</div>
+      <div class="hidden portrait:flex flex--row flex--left flex--center-y gap--small">{% render "row_name", name: name, caption: sev_labels[d1], title_class: title_class %}</div>
       <div class="grid grid--cols-6 portrait:grid--cols-4 gap--small{% if fill %} grow{% endif %}">
         <div class="flex flex--col flex--left flex--center-y col--span-2 portrait:hidden">{% render "row_name", name: name, caption: sev_labels[d1], title_class: title_class %}</div>
     {% endif %}
       {% for i in (1..4) %}
         {% assign key = "contamination_" | append: i %}
         {% assign d = entry[key] | default: 0 | plus: 0 %}
-        {% assign cell = "" %}
+        {% comment %}
+          Every day is a box: 0 is outlined on white, 1-2 get a light gray fill (a light dot pattern in 1-bit,
+          so it still differs from 0), 3-4 are solid black.
+        {% endcomment %}
+        {% assign cell = "outline" %}
         {% assign cell_text = "" %}
-        {% comment %} Solid black from level 3 and an outline below it stay crisp in 1-bit. {% endcomment %}
         {% if d >= 3 %}
           {% assign cell = "outline bg--black" %}
           {% assign cell_text = " text--white" %}
         {% elsif d >= 1 %}
-          {% assign cell = "outline bg--gray-75 1bit:bg--white" %}
+          {% assign cell = "outline bg--gray-75" %}
         {% endif %}
         <div class="flex flex--col flex--center-x flex--center-y p--1 lg:p--2 {{ cell }}">
           <span class="value {{ value_class }} value--tnums{{ cell_text }}">{{ d }}</span>
@@ -470,8 +477,8 @@
 {% template state %}
 <div class="flex flex--col flex--center-x flex--center-y gap--small w--full stretch-y {{ lift }}">
   <span class="value {{ symbol_class }}">{{ symbol }}</span>
-  <span class="label {{ label_class }}">{{ headline }}</span>
-  {% if detail != "" %}<span class="label label--small 1bit:text--black">{{ detail | escape }}</span>{% endif %}
+  <span class="label text--center {{ label_class }}">{{ headline }}</span>
+  {% if detail != "" %}<span class="label label--small text--center 1bit:text--black">{{ detail | escape }}</span>{% endif %}
 </div>
 {% endtemplate %}
 
