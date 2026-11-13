@@ -13,14 +13,16 @@
 
 <div class="layout layout--col layout--top gap--small">
   {% if api_error != "" %}
-    {% render "state", symbol: "!", headline: api_error_headline, detail: api_error, symbol_class: "value--xxxlarge lg:value--giga", label_class: "label--large lg:label--xlarge" %}
+    {% render "state", symbol: "!", lift: "pb--4 lg:pb--9", headline: api_error_headline, detail: api_error, symbol_class: "value--xxxlarge lg:value--giga", label_class: "label--large lg:label--xlarge" %}
   {% elsif entries.size == 0 %}
-    {% render "state", symbol: "✕", headline: t_no_data, detail: "", symbol_class: "value--xxxlarge lg:value--giga", label_class: "label--large lg:label--xlarge" %}
+    {% render "state", symbol: "✕", lift: "pb--5 lg:pb--10", headline: t_no_data, detail: "", symbol_class: "value--xxxlarge lg:value--giga", label_class: "label--large lg:label--xlarge" %}
   {% else %}
-    {% render "risk_row", allergyrisk: allergyrisk, day_labels: day_labels, t_allergy_risk: t_allergy_risk, t_risk_scale: t_risk_scale, title_class: title_class, value_class: risk_value_class, stacked: true %}
-    <div class="divider"></div>
+    {% if show_risk or active_count > 0 %}
+      {% render "day_header", show_risk: show_risk, allergyrisk: allergyrisk, day_labels: day_labels, t_allergy_risk: t_allergy_risk, t_risk_scale: t_risk_scale, title_class: title_class, value_class: risk_value_class, stacked: true %}
+    {% endif %}
+    {% if show_risk %}<div class="divider"></div>{% endif %}
     {% if active_count == 0 %}
-      {% render "state", symbol: "✓", headline: t_no_load, detail: "", symbol_class: "value--xxlarge lg:value--giga", label_class: "label--base lg:label--xlarge" %}
+      {% render "state", symbol: "✓", lift: "pb--8 lg:pb--16", headline: t_no_load, detail: t_no_load_detail, symbol_class: "value--xxlarge lg:value--giga", label_class: "label--base lg:label--xlarge" %}
     {% else %}
       {% if fill %}
         <div class="flex flex--col gap--small w--full stretch-y">

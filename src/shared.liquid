@@ -4,37 +4,336 @@
 {% assign pollen_filter = cf.pollen_filter | default: "" | strip %}
 {% assign filter_list = pollen_filter | split: "," %}
 {% assign min_severity = cf.min_severity | default: "1" | plus: 0 %}
+{% comment %}
+  TRMNL saves a switch as "true" or "false". Installs from before the switch existed have no value
+  and keep showing the allergy risk.
+{% endcomment %}
+{% assign show_risk = true %}
+{% assign show_risk_value = cf.show_allergy_risk | append: "" | downcase %}
+{% if show_risk_value == "false" %}{% assign show_risk = false %}{% endif %}
 
+{% comment %}
+  The plugin's own text in every language the API offers. The API translates the pollen names itself.
+  no_load_pattern and level_pattern take {n} (the Minimum Severity) and {s} (its name), because the word
+  order differs between languages. Unknown codes fall back to English.
+{% endcomment %}
 {% assign lang = cf.language | default: "de" %}
-{% if lang == "de" %}
-  {% assign t_no_data = "Keine Pollendaten verfügbar" %}
-  {% assign t_no_load = "Keine Pollenbelastung" %}
-  {% assign t_today = "Heute" %}
-  {% assign t_tomorrow = "Morgen" %}
-  {% assign t_weekdays = "So,Mo,Di,Mi,Do,Fr,Sa" | split: "," %}
-  {% assign t_sev = "keine,gering,mäßig,stark,sehr stark" | split: "," %}
-  {% assign t_title_forecast = "Pollenbelastung" %}
-  {% assign t_title_today = "Pollenbelastung heute" %}
-  {% assign t_title_quadrant = "Pollen heute" %}
-  {% assign t_allergy_risk = "Allergierisiko" %}
-  {% assign t_risk_scale = "von 10" %}
-  {% assign t_api_error = "API-Fehler" %}
-  {% assign t_api_key_error = "API-Key prüfen" %}
+{% liquid
+  case lang
+  when "de"
+    assign t_no_data = "Keine Pollendaten verfügbar"
+    assign t_none = "Keine Pollen"
+    assign t_none_matching = "Keine passenden Pollen"
+    assign t_no_load_pattern = "Keine Pollen ab Stufe {n} ({s})"
+    assign t_level_pattern = "ab Stufe {n}"
+    assign t_filter = "Filter"
+    assign t_today = "Heute"
+    assign t_tomorrow = "Morgen"
+    assign t_weekdays = "So,Mo,Di,Mi,Do,Fr,Sa" | split: ","
+    assign t_sev = "keine,gering,mäßig,stark,sehr stark" | split: ","
+    assign t_title_forecast = "Pollenbelastung"
+    assign t_title_today = "Pollenbelastung heute"
+    assign t_title_quadrant = "Pollen heute"
+    assign t_allergy_risk = "Allergierisiko"
+    assign t_risk_scale = "von 10"
+    assign t_api_error = "API-Fehler"
+    assign t_api_key_error = "API-Key prüfen"
+  when "fr"
+    assign t_no_data = "Aucune donnée pollinique disponible"
+    assign t_none = "Aucun pollen"
+    assign t_none_matching = "Aucun pollen correspondant"
+    assign t_no_load_pattern = "Aucun pollen de niveau {n} ou plus ({s})"
+    assign t_level_pattern = "niveau {n} ou plus"
+    assign t_filter = "Filtre"
+    assign t_today = "Aujourd'hui"
+    assign t_tomorrow = "Demain"
+    assign t_weekdays = "Dim,Lun,Mar,Mer,Jeu,Ven,Sam" | split: ","
+    assign t_sev = "aucun,faible,modéré,fort,très fort" | split: ","
+    assign t_title_forecast = "Exposition aux pollens"
+    assign t_title_today = "Pollens aujourd'hui"
+    assign t_title_quadrant = "Pollens aujourd'hui"
+    assign t_allergy_risk = "Risque allergique"
+    assign t_risk_scale = "sur 10"
+    assign t_api_error = "Erreur API"
+    assign t_api_key_error = "Vérifier la clé API"
+  when "it"
+    assign t_no_data = "Nessun dato sui pollini disponibile"
+    assign t_none = "Nessun polline"
+    assign t_none_matching = "Nessun polline corrispondente"
+    assign t_no_load_pattern = "Nessun polline dal livello {n} in su ({s})"
+    assign t_level_pattern = "dal livello {n} in su"
+    assign t_filter = "Filtro"
+    assign t_today = "Oggi"
+    assign t_tomorrow = "Domani"
+    assign t_weekdays = "Dom,Lun,Mar,Mer,Gio,Ven,Sab" | split: ","
+    assign t_sev = "nessuno,basso,moderato,alto,molto alto" | split: ","
+    assign t_title_forecast = "Carico pollinico"
+    assign t_title_today = "Carico pollinico oggi"
+    assign t_title_quadrant = "Pollini oggi"
+    assign t_allergy_risk = "Rischio allergico"
+    assign t_risk_scale = "su 10"
+    assign t_api_error = "Errore API"
+    assign t_api_key_error = "Controlla la chiave API"
+  when "es"
+    assign t_no_data = "No hay datos de polen disponibles"
+    assign t_none = "Sin polen"
+    assign t_none_matching = "Ningún polen coincidente"
+    assign t_no_load_pattern = "Sin polen de nivel {n} o superior ({s})"
+    assign t_level_pattern = "nivel {n} o superior"
+    assign t_filter = "Filtro"
+    assign t_today = "Hoy"
+    assign t_tomorrow = "Mañana"
+    assign t_weekdays = "Dom,Lun,Mar,Mié,Jue,Vie,Sáb" | split: ","
+    assign t_sev = "nulo,bajo,moderado,alto,muy alto" | split: ","
+    assign t_title_forecast = "Carga de polen"
+    assign t_title_today = "Carga de polen hoy"
+    assign t_title_quadrant = "Polen hoy"
+    assign t_allergy_risk = "Riesgo de alergia"
+    assign t_risk_scale = "de 10"
+    assign t_api_error = "Error de API"
+    assign t_api_key_error = "Revisa la clave API"
+  when "pt"
+    assign t_no_data = "Sem dados de pólen disponíveis"
+    assign t_none = "Sem pólen"
+    assign t_none_matching = "Nenhum pólen correspondente"
+    assign t_no_load_pattern = "Sem pólen de nível {n} ou superior ({s})"
+    assign t_level_pattern = "nível {n} ou superior"
+    assign t_filter = "Filtro"
+    assign t_today = "Hoje"
+    assign t_tomorrow = "Amanhã"
+    assign t_weekdays = "Dom,Seg,Ter,Qua,Qui,Sex,Sáb" | split: ","
+    assign t_sev = "nenhum,baixo,moderado,alto,muito alto" | split: ","
+    assign t_title_forecast = "Carga polínica"
+    assign t_title_today = "Carga polínica hoje"
+    assign t_title_quadrant = "Pólen hoje"
+    assign t_allergy_risk = "Risco de alergia"
+    assign t_risk_scale = "de 10"
+    assign t_api_error = "Erro da API"
+    assign t_api_key_error = "Verifique a chave da API"
+  when "pl"
+    assign t_no_data = "Brak danych o pyłkach"
+    assign t_none = "Brak pyłków"
+    assign t_none_matching = "Brak pasujących pyłków"
+    assign t_no_load_pattern = "Brak pyłków od poziomu {n} ({s})"
+    assign t_level_pattern = "od poziomu {n}"
+    assign t_filter = "Filtr"
+    assign t_today = "Dziś"
+    assign t_tomorrow = "Jutro"
+    assign t_weekdays = "Nd,Pn,Wt,Śr,Cz,Pt,So" | split: ","
+    assign t_sev = "brak,niskie,umiarkowane,wysokie,bardzo wysokie" | split: ","
+    assign t_title_forecast = "Stężenie pyłków"
+    assign t_title_today = "Stężenie pyłków dziś"
+    assign t_title_quadrant = "Pyłki dziś"
+    assign t_allergy_risk = "Ryzyko alergii"
+    assign t_risk_scale = "na 10"
+    assign t_api_error = "Błąd API"
+    assign t_api_key_error = "Sprawdź klucz API"
+  when "sv"
+    assign t_no_data = "Inga pollendata tillgängliga"
+    assign t_none = "Inget pollen"
+    assign t_none_matching = "Inget matchande pollen"
+    assign t_no_load_pattern = "Inget pollen på nivå {n} eller högre ({s})"
+    assign t_level_pattern = "nivå {n} eller högre"
+    assign t_filter = "Filter"
+    assign t_today = "Idag"
+    assign t_tomorrow = "Imorgon"
+    assign t_weekdays = "Sön,Mån,Tis,Ons,Tor,Fre,Lör" | split: ","
+    assign t_sev = "inget,lågt,måttligt,högt,mycket högt" | split: ","
+    assign t_title_forecast = "Pollenhalter"
+    assign t_title_today = "Pollenhalter idag"
+    assign t_title_quadrant = "Pollen idag"
+    assign t_allergy_risk = "Allergirisk"
+    assign t_risk_scale = "av 10"
+    assign t_api_error = "API-fel"
+    assign t_api_key_error = "Kontrollera API-nyckeln"
+  when "fi"
+    assign t_no_data = "Siitepölytietoja ei saatavilla"
+    assign t_none = "Ei siitepölyä"
+    assign t_none_matching = "Ei vastaavaa siitepölyä"
+    assign t_no_load_pattern = "Ei siitepölyä tasolla {n} tai yli ({s})"
+    assign t_level_pattern = "taso {n} tai yli"
+    assign t_filter = "Suodatin"
+    assign t_today = "Tänään"
+    assign t_tomorrow = "Huomenna"
+    assign t_weekdays = "Su,Ma,Ti,Ke,To,Pe,La" | split: ","
+    assign t_sev = "ei,vähäinen,kohtalainen,runsas,erittäin runsas" | split: ","
+    assign t_title_forecast = "Siitepölytilanne"
+    assign t_title_today = "Siitepölytilanne tänään"
+    assign t_title_quadrant = "Siitepöly tänään"
+    assign t_allergy_risk = "Allergiariski"
+    assign t_risk_scale = "asteikolla 0–10"
+    assign t_api_error = "API-virhe"
+    assign t_api_key_error = "Tarkista API-avain"
+  when "lv"
+    assign t_no_data = "Nav pieejamu ziedputekšņu datu"
+    assign t_none = "Nav ziedputekšņu"
+    assign t_none_matching = "Nav atbilstošu ziedputekšņu"
+    assign t_no_load_pattern = "Nav ziedputekšņu no {n}. līmeņa ({s})"
+    assign t_level_pattern = "no {n}. līmeņa"
+    assign t_filter = "Filtrs"
+    assign t_today = "Šodien"
+    assign t_tomorrow = "Rīt"
+    assign t_weekdays = "Sv,Pr,Ot,Tr,Ce,Pk,Se" | split: ","
+    assign t_sev = "nav,zema,vidēja,augsta,ļoti augsta" | split: ","
+    assign t_title_forecast = "Ziedputekšņu slodze"
+    assign t_title_today = "Ziedputekšņu slodze šodien"
+    assign t_title_quadrant = "Ziedputekšņi šodien"
+    assign t_allergy_risk = "Alerģijas risks"
+    assign t_risk_scale = "no 10"
+    assign t_api_error = "API kļūda"
+    assign t_api_key_error = "Pārbaudiet API atslēgu"
+  when "lt"
+    assign t_no_data = "Žiedadulkių duomenų nėra"
+    assign t_none = "Žiedadulkių nėra"
+    assign t_none_matching = "Atitinkančių žiedadulkių nėra"
+    assign t_no_load_pattern = "Nėra žiedadulkių nuo {n} lygio ({s})"
+    assign t_level_pattern = "nuo {n} lygio"
+    assign t_filter = "Filtras"
+    assign t_today = "Šiandien"
+    assign t_tomorrow = "Rytoj"
+    assign t_weekdays = "Sk,Pr,An,Tr,Kt,Pn,Št" | split: ","
+    assign t_sev = "nėra,maža,vidutinė,didelė,labai didelė" | split: ","
+    assign t_title_forecast = "Žiedadulkių koncentracija"
+    assign t_title_today = "Žiedadulkės šiandien"
+    assign t_title_quadrant = "Žiedadulkės šiandien"
+    assign t_allergy_risk = "Alergijos rizika"
+    assign t_risk_scale = "iš 10"
+    assign t_api_error = "API klaida"
+    assign t_api_key_error = "Patikrinkite API raktą"
+  when "ru"
+    assign t_no_data = "Нет данных о пыльце"
+    assign t_none = "Нет пыльцы"
+    assign t_none_matching = "Нет подходящей пыльцы"
+    assign t_no_load_pattern = "Нет пыльцы уровня {n} и выше ({s})"
+    assign t_level_pattern = "уровень {n} и выше"
+    assign t_filter = "Фильтр"
+    assign t_today = "Сегодня"
+    assign t_tomorrow = "Завтра"
+    assign t_weekdays = "Вс,Пн,Вт,Ср,Чт,Пт,Сб" | split: ","
+    assign t_sev = "нет,низкий,умеренный,высокий,очень высокий" | split: ","
+    assign t_title_forecast = "Концентрация пыльцы"
+    assign t_title_today = "Пыльца сегодня"
+    assign t_title_quadrant = "Пыльца сегодня"
+    assign t_allergy_risk = "Риск аллергии"
+    assign t_risk_scale = "из 10"
+    assign t_api_error = "Ошибка API"
+    assign t_api_key_error = "Проверьте API-ключ"
+  when "uk"
+    assign t_no_data = "Немає даних про пилок"
+    assign t_none = "Немає пилку"
+    assign t_none_matching = "Немає відповідного пилку"
+    assign t_no_load_pattern = "Немає пилку рівня {n} і вище ({s})"
+    assign t_level_pattern = "рівень {n} і вище"
+    assign t_filter = "Фільтр"
+    assign t_today = "Сьогодні"
+    assign t_tomorrow = "Завтра"
+    assign t_weekdays = "Нд,Пн,Вт,Ср,Чт,Пт,Сб" | split: ","
+    assign t_sev = "немає,низький,помірний,високий,дуже високий" | split: ","
+    assign t_title_forecast = "Концентрація пилку"
+    assign t_title_today = "Пилок сьогодні"
+    assign t_title_quadrant = "Пилок сьогодні"
+    assign t_allergy_risk = "Ризик алергії"
+    assign t_risk_scale = "з 10"
+    assign t_api_error = "Помилка API"
+    assign t_api_key_error = "Перевірте API-ключ"
+  when "tr"
+    assign t_no_data = "Polen verisi yok"
+    assign t_none = "Polen yok"
+    assign t_none_matching = "Eşleşen polen yok"
+    assign t_no_load_pattern = "Seviye {n} ve üzeri polen yok ({s})"
+    assign t_level_pattern = "seviye {n} ve üzeri"
+    assign t_filter = "Filtre"
+    assign t_today = "Bugün"
+    assign t_tomorrow = "Yarın"
+    assign t_weekdays = "Paz,Pzt,Sal,Çar,Per,Cum,Cmt" | split: ","
+    assign t_sev = "yok,düşük,orta,yüksek,çok yüksek" | split: ","
+    assign t_title_forecast = "Polen yoğunluğu"
+    assign t_title_today = "Bugünkü polen"
+    assign t_title_quadrant = "Bugünkü polen"
+    assign t_allergy_risk = "Alerji riski"
+    assign t_risk_scale = "10 üzerinden"
+    assign t_api_error = "API hatası"
+    assign t_api_key_error = "API anahtarını kontrol edin"
+  when "hu"
+    assign t_no_data = "Nincs elérhető pollenadat"
+    assign t_none = "Nincs pollen"
+    assign t_none_matching = "Nincs egyező pollen"
+    assign t_no_load_pattern = "Nincs pollen {n}. szinttől ({s})"
+    assign t_level_pattern = "{n}. szinttől"
+    assign t_filter = "Szűrő"
+    assign t_today = "Ma"
+    assign t_tomorrow = "Holnap"
+    assign t_weekdays = "V,H,K,Sze,Cs,P,Szo" | split: ","
+    assign t_sev = "nincs,alacsony,mérsékelt,magas,nagyon magas" | split: ","
+    assign t_title_forecast = "Pollenterhelés"
+    assign t_title_today = "Pollenterhelés ma"
+    assign t_title_quadrant = "Pollen ma"
+    assign t_allergy_risk = "Allergiakockázat"
+    assign t_risk_scale = "10-ből"
+    assign t_api_error = "API-hiba"
+    assign t_api_key_error = "Ellenőrizd az API-kulcsot"
+  when "sk"
+    assign t_no_data = "Údaje o peli nie sú k dispozícii"
+    assign t_none = "Žiadny peľ"
+    assign t_none_matching = "Žiadny zodpovedajúci peľ"
+    assign t_no_load_pattern = "Žiadny peľ od úrovne {n} ({s})"
+    assign t_level_pattern = "od úrovne {n}"
+    assign t_filter = "Filter"
+    assign t_today = "Dnes"
+    assign t_tomorrow = "Zajtra"
+    assign t_weekdays = "Ne,Po,Ut,St,Št,Pi,So" | split: ","
+    assign t_sev = "žiadna,nízka,mierna,vysoká,veľmi vysoká" | split: ","
+    assign t_title_forecast = "Peľová situácia"
+    assign t_title_today = "Peľová situácia dnes"
+    assign t_title_quadrant = "Peľ dnes"
+    assign t_allergy_risk = "Riziko alergie"
+    assign t_risk_scale = "z 10"
+    assign t_api_error = "Chyba API"
+    assign t_api_key_error = "Skontrolujte kľúč API"
+  else
+    assign t_no_data = "No pollen data available"
+    assign t_none = "No pollen"
+    assign t_none_matching = "No matching pollen"
+    assign t_no_load_pattern = "No pollen at level {n} or higher ({s})"
+    assign t_level_pattern = "level {n} or higher"
+    assign t_filter = "Filter"
+    assign t_today = "Today"
+    assign t_tomorrow = "Tomorrow"
+    assign t_weekdays = "Sun,Mon,Tue,Wed,Thu,Fri,Sat" | split: ","
+    assign t_sev = "none,low,moderate,high,very high" | split: ","
+    assign t_title_forecast = "Pollen Exposure"
+    assign t_title_today = "Pollen Exposure Today"
+    assign t_title_quadrant = "Pollen Today"
+    assign t_allergy_risk = "Allergy risk"
+    assign t_risk_scale = "out of 10"
+    assign t_api_error = "API error"
+    assign t_api_key_error = "Check API key"
+  endcase
+%}
+
+{% comment %}
+  When nothing passes Minimum Severity and the Pollen Filter, say which limit hid the pollen, so
+  "nothing shown" does not read as "everything is 0": "Keine Pollen ab Stufe 1 (gering)".
+{% endcomment %}
+{% assign t_min_level = "" %}
+{% if min_severity > 0 %}
+  {% assign min_severity_name = t_sev[min_severity] %}
+  {% assign t_min_level = t_level_pattern | replace: "{n}", min_severity %}
+  {% assign t_no_load = t_no_load_pattern | replace: "{n}", min_severity | replace: "{s}", min_severity_name %}
+  {% assign t_no_load_short = t_none %}
 {% else %}
-  {% assign t_no_data = "No pollen data available" %}
-  {% assign t_no_load = "No pollen exposure" %}
-  {% assign t_today = "Today" %}
-  {% assign t_tomorrow = "Tomorrow" %}
-  {% assign t_weekdays = "Sun,Mon,Tue,Wed,Thu,Fri,Sat" | split: "," %}
-  {% assign t_sev = "none,low,moderate,high,very high" | split: "," %}
-  {% assign t_title_forecast = "Pollen Exposure" %}
-  {% assign t_title_today = "Pollen Exposure Today" %}
-  {% assign t_title_quadrant = "Pollen Today" %}
-  {% assign t_allergy_risk = "Allergy risk" %}
-  {% assign t_risk_scale = "out of 10" %}
-  {% assign t_api_error = "API error" %}
-  {% assign t_api_key_error = "Check API key" %}
+  {% assign t_no_load = t_none_matching %}
+  {% assign t_no_load_short = t_none_matching %}
 {% endif %}
+{% assign t_filter_names = "" %}
+{% for f in filter_list %}
+  {% assign f_clean = f | strip %}
+  {% if f_clean == "" %}{% continue %}{% endif %}
+  {% if t_filter_names != "" %}{% assign t_filter_names = t_filter_names | append: ", " %}{% endif %}
+  {% assign t_filter_names = t_filter_names | append: f_clean %}
+{% endfor %}
+{% assign t_no_load_detail = "" %}
+{% if t_filter_names != "" %}{% assign t_no_load_detail = t_filter | append: ": " | append: t_filter_names %}{% endif %}
 
 {% assign t_instance_full = "Österreichischer Polleninformationsdienst, www.polleninformation.at" %}
 {% assign t_instance_short = "polleninformation.at" %}
@@ -69,15 +368,19 @@
   {% assign active_count = active_count | plus: 1 %}
 {% endfor %}
 
-{% comment %} Today-only views show the allergy risk as one more card. {% endcomment %}
-{% assign today_cards = active_count | plus: 1 %}
+{% comment %}
+  Today-only views: one card per pollen type (or one "no pollen" card), plus the allergy risk
+  when it is shown.
+{% endcomment %}
+{% assign today_cards = active_count | at_least: 1 %}
+{% if show_risk %}{% assign today_cards = today_cards | plus: 1 %}{% endif %}
 {% assign half_cols = today_cards | at_most: 4 %}
 {% if today_cards > 4 %}{% assign half_cols = today_cards | plus: 1 | divided_by: 2 | at_most: 4 %}{% endif %}
 {% assign quadrant_cols = today_cards | at_most: 2 %}
 
 {% comment %}
-  Forecast rows: a name, then one cell per day. The allergy risk row on top carries the day names,
-  so the pollen rows below only need their numbers.
+  Forecast rows: a name, then one cell per day. The header row on top carries the day names, so the
+  pollen rows below only need their numbers. With show_risk it also holds the allergy risk.
   stacked: false puts the name in front of the cells in landscape and above them in portrait;
   stacked: true always puts it above (narrow views). The name is written once for each place and
   the Framework shows one of them, so the cells keep a grid row of their own that can grow.
@@ -87,24 +390,24 @@
 <span class="label label--small 1bit:text--black">{{ caption }}</span>
 {% endtemplate %}
 
-{% template risk_row %}
+{% template day_header %}
 <div class="item">
   <div class="meta bg--white"></div>
   <div class="content grow gap--small">
     {% if stacked %}
-      <div class="flex flex--col flex--left">{% render "row_name", name: t_allergy_risk, caption: t_risk_scale, title_class: title_class %}</div>
+      {% if show_risk %}<div class="flex flex--col flex--left">{% render "row_name", name: t_allergy_risk, caption: t_risk_scale, title_class: title_class %}</div>{% endif %}
       <div class="grid grid--cols-4 gap--small">
     {% else %}
-      <div class="hidden portrait:flex flex--col flex--left">{% render "row_name", name: t_allergy_risk, caption: t_risk_scale, title_class: title_class %}</div>
+      {% if show_risk %}<div class="hidden portrait:flex flex--col flex--left">{% render "row_name", name: t_allergy_risk, caption: t_risk_scale, title_class: title_class %}</div>{% endif %}
       <div class="grid grid--cols-6 portrait:grid--cols-4 gap--small">
-        <div class="flex flex--col flex--left flex--center-y col--span-2 portrait:hidden">{% render "row_name", name: t_allergy_risk, caption: t_risk_scale, title_class: title_class %}</div>
+        <div class="flex flex--col flex--left flex--center-y col--span-2 portrait:hidden">{% if show_risk %}{% render "row_name", name: t_allergy_risk, caption: t_risk_scale, title_class: title_class %}{% endif %}</div>
     {% endif %}
       {% for i in (1..4) %}
         {% assign key = "allergyrisk_" | append: i %}
         {% assign label_index = i | minus: 1 %}
-        <div class="flex flex--col flex--center-x p--1 lg:p--2">
+        <div class="flex flex--col flex--center-x{% if show_risk %} p--1 lg:p--2{% endif %}">
           <span class="label label--small 1bit:text--black">{{ day_labels[label_index] }}</span>
-          <span class="value {{ value_class }} value--tnums">{{ allergyrisk[key] | default: 0 }}</span>
+          {% if show_risk %}<span class="value {{ value_class }} value--tnums">{{ allergyrisk[key] | default: 0 }}</span>{% endif %}
         </div>
       {% endfor %}
     </div>
@@ -160,8 +463,12 @@
 </div>
 {% endtemplate %}
 
+{% comment %}
+  A full-area message (✓ / ✕ / !). The symbol's glyph fills only the middle of its tall line box, so the
+  block looks low when its box is centered. lift adds bottom padding to centre the visible ink instead.
+{% endcomment %}
 {% template state %}
-<div class="flex flex--col flex--center-x flex--center-y gap stretch-x stretch-y">
+<div class="flex flex--col flex--center-x flex--center-y gap--small w--full stretch-y {{ lift }}">
   <span class="value {{ symbol_class }}">{{ symbol }}</span>
   <span class="label {{ label_class }}">{{ headline }}</span>
   {% if detail != "" %}<span class="label label--small 1bit:text--black">{{ detail | escape }}</span>{% endif %}

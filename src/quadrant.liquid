@@ -9,14 +9,18 @@
 
 <div class="layout layout--col gap--small">
   {% if api_error != "" %}
-    {% render "state", symbol: "!", headline: api_error_headline, detail: "", symbol_class: "value--xlarge lg:value--xxxlarge", label_class: "label--base lg:label--xlarge" %}
+    {% render "state", symbol: "!", lift: "pb--3 lg:pb--4", headline: api_error_headline, detail: "", symbol_class: "value--xlarge lg:value--xxxlarge", label_class: "label--base lg:label--xlarge" %}
   {% elsif entries.size == 0 %}
-    {% render "state", symbol: "✕", headline: t_no_data, detail: "", symbol_class: "value--xlarge lg:value--xxxlarge", label_class: "label--base lg:label--xlarge" %}
+    {% render "state", symbol: "✕", lift: "pb--4 lg:pb--5", headline: t_no_data, detail: "", symbol_class: "value--xlarge lg:value--xxxlarge", label_class: "label--base lg:label--xlarge" %}
+  {% elsif active_count == 0 and show_risk == false %}
+    {% render "state", symbol: "✓", lift: "pb--6 lg:pb--9", headline: t_no_load, detail: "", symbol_class: "value--xlarge lg:value--xxxlarge", label_class: "label--base lg:label--xlarge" %}
   {% else %}
     <div class="grid grid--cols-{{ quadrant_cols }} gap--small w--full" data-overflow="true" data-overflow-counter="true">
-      {% render "today_card", title: t_allergy_risk, value: allergyrisk.allergyrisk_1, caption: t_risk_scale, emphasis: "", meta_class: " bg--white", title_class: title_class, value_class: value_class %}
+      {% if show_risk %}
+        {% render "today_card", title: t_allergy_risk, value: allergyrisk.allergyrisk_1, caption: t_risk_scale, emphasis: "", meta_class: " bg--white", title_class: title_class, value_class: value_class %}
+      {% endif %}
       {% if active_count == 0 %}
-        {% render "today_card", title: "✓", value: 0, caption: t_no_load, emphasis: "", meta_class: "", title_class: title_class, value_class: value_class %}
+        {% render "today_card", title: t_no_load_short, value: "✓", caption: t_min_level, emphasis: "", meta_class: "", title_class: title_class, value_class: value_class %}
       {% endif %}
       {% for entry in entries %}
         {% assign entry_key = entry.poll_id | prepend: "," | append: "," %}

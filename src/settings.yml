@@ -45,7 +45,7 @@ custom_fields:
 - keyname: language
   field_type: select
   name: Language
-  description: Language for pollen names. Also controls the plugin's UI text for German and English; all other languages fall back to English UI text.
+  description: Language for the pollen names and the plugin's own text.
   default: de
   options:
   - German: de
@@ -86,12 +86,18 @@ custom_fields:
   - Moderate and above (2+): "2"
   - High and above (3+): "3"
   - Very high only (4+): "4"
+- keyname: show_allergy_risk
+  field_type: boolean
+  name: Show Allergy Risk
+  description: Show the overall allergy risk (0 to 10) above the pollen types.
+  help_text: The allergy risk covers all pollen types. It does not follow the Pollen Filter or Minimum Severity, so turn it off if you only care about a few pollen types.
+  default: true
 name: Pollen Information Austria
 description: Pollen forecast for your location
 recipe_overview: |-
   See today's pollen exposure and the forecast for the next three days on your TRMNL, for your own location. The data comes from the free API of the Austrian Pollen Information Service (Österreichischer Polleninformationsdienst), which covers Austria and 12 more European countries, from Germany and Switzerland to the United Kingdom, Sweden and Turkey.
 
-  Each pollen type gets its own row with a level from 0 (none) to 4 (very high) for today and the following three days, so you can plan a walk, a run or when to air out your home. The overall allergy risk on a scale from 0 to 10 sits on top. Pollen names are available in 16 languages, the plugin's own text in German and English.
+  Each pollen type gets its own row with a level from 0 (none) to 4 (very high) for today and the following three days, so you can plan a walk, a run or when to air out your home. The overall allergy risk on a scale from 0 to 10 can sit on top. Pollen names and the plugin's own text are available in 16 languages.
 
   Show only the pollen types that affect you with the pollen filter, or hide low levels with the minimum severity setting. The full and half vertical views show the 4-day forecast; the half horizontal and quadrant views focus on today. On quiet days the few remaining pollen types are drawn larger, so the screen stays easy to read from across the room.
 
