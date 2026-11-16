@@ -18,6 +18,8 @@ RSpec.describe 'Pollen Information Austria' do
     'a quiet autumn day' => [forecast('autumn'), {}],
     # The same answer with nothing at or above the minimum severity: the "no pollen" screen.
     'a day without pollen above the minimum' => [forecast('autumn'), { 'min_severity' => '2' }],
+    # The default minimum (1) with a filter that matches nothing: "no pollen" without a level.
+    'a day without the filtered pollen' => [forecast('autumn'), { 'pollen_filter' => 'Birke, Gräser' }],
     # A spring answer: many pollen types at levels 1-3 and a high allergy risk.
     'a busy spring day' => [forecast('spring'), {}]
   }.each do |day, (answer, fields)|

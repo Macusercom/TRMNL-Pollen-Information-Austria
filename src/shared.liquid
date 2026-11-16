@@ -312,14 +312,19 @@
 %}
 
 {% comment %}
-  When nothing passes Minimum Severity and the Pollen Filter, say which limit hid the pollen, so
-  "nothing shown" does not read as "everything is 0": "Keine Pollen ab Stufe 1 (gering)".
+  When nothing passes Minimum Severity and the Pollen Filter, say why. Level 0 means no load, so with the
+  default (1 and higher) "Keine Pollen" is simply true. From level 2 up, lower levels may exist but are
+  hidden, so name the limit: "Keine Pollen ab Stufe 2 (mäßig)". With "show all" (0) only the filter can
+  hide anything: "Keine passenden Pollen".
 {% endcomment %}
 {% assign t_min_level = "" %}
-{% if min_severity > 0 %}
+{% if min_severity > 1 %}
   {% assign min_severity_name = t_sev[min_severity] %}
   {% assign t_min_level = t_level_pattern | replace: "{n}", min_severity %}
   {% assign t_no_load = t_no_load_pattern | replace: "{n}", min_severity | replace: "{s}", min_severity_name %}
+  {% assign t_no_load_short = t_none %}
+{% elsif min_severity == 1 %}
+  {% assign t_no_load = t_none %}
   {% assign t_no_load_short = t_none %}
 {% else %}
   {% assign t_no_load = t_none_matching %}
@@ -465,7 +470,8 @@
   <div class="content grow gap--small">
     <span class="title {{ title_class }}" data-clamp="1">{{ title | escape }}</span>
     <span class="value {{ value_class }} value--tnums">{{ value }}</span>
-    <span class="label label--small 1bit:text--black">{{ caption }}</span>
+    {% comment %} An empty caption keeps its line, so every card's title and value line up. {% endcomment %}
+    <span class="label label--small 1bit:text--black">{% if caption != "" %}{{ caption }}{% else %}&nbsp;{% endif %}</span>
   </div>
 </div>
 {% endtemplate %}
