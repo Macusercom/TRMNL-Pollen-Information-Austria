@@ -26,7 +26,14 @@
     {% endif %}
     {% if show_risk %}<div class="divider"></div>{% endif %}
     {% if active_count == 0 %}
-      {% render "state", symbol: "✓", lift: "pb--8 lg:pb--16", headline: t_no_load, detail: t_no_load_detail, symbol_class: "value--xxlarge lg:value--giga", label_class: "label--large lg:label--xlarge" %}
+      {% comment %} A big check mark; under the risk row a landscape TRMNL X only has room for the next size down. {% endcomment %}
+      {% assign check_class = "value--xxxlarge lg:value--peta" %}
+      {% assign check_lift = "pb--10 lg:pb--28" %}
+      {% if show_risk %}
+        {% assign check_class = "value--xxxlarge lg:value--giga lg:portrait:value--peta" %}
+        {% assign check_lift = "pb--10 lg:pb--16 lg:portrait:pb--28" %}
+      {% endif %}
+      {% render "state", symbol: "✓", lift: check_lift, headline: t_no_load, detail: t_no_load_detail, symbol_class: check_class, label_class: "label--large lg:label--xlarge" %}
     {% else %}
       {% if fill %}
         <div class="flex flex--col gap--small w--full stretch-y">
