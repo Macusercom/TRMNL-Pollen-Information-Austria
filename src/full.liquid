@@ -17,9 +17,9 @@
 
 <div class="layout layout--col layout--top gap--small">
   {% if api_error != "" %}
-    {% render "state", symbol: "!", lift: "pb--4 lg:pb--14", headline: api_error_headline, detail: api_error, symbol_class: "value--xxxlarge lg:value--peta", label_class: "label--xlarge lg:label--xxlarge" %}
+    {% render "state", detail_class: "description--large lg:description--xlarge", symbol: "!", lift: "pb--4 lg:pb--14", headline: api_error_headline, detail: api_error, symbol_class: "value--xxxlarge lg:value--peta", label_class: "label--xlarge lg:label--xxlarge" %}
   {% elsif entries.size == 0 %}
-    {% render "state", symbol: "✕", lift: "pb--5 lg:pb--16", headline: t_no_data, detail: "", symbol_class: "value--xxxlarge lg:value--peta", label_class: "label--xlarge lg:label--xxlarge" %}
+    {% render "state", detail_class: "description--large lg:description--xlarge", symbol: "✕", lift: "pb--5 lg:pb--16", headline: t_no_data, detail: "", symbol_class: "value--xxxlarge lg:value--peta", label_class: "label--xlarge lg:label--xxlarge" %}
   {% else %}
     {% if show_risk or active_count > 0 %}
       {% render "day_header", show_risk: show_risk, allergyrisk: allergyrisk, day_labels: day_labels, t_allergy_risk: t_allergy_risk, t_risk_scale: t_risk_scale, title_class: title_class, value_class: risk_value_class, stacked: false %}
@@ -33,7 +33,7 @@
         {% assign check_class = "value--xxxlarge lg:value--giga lg:portrait:value--peta" %}
         {% assign check_lift = "pb--10 lg:pb--16 lg:portrait:pb--28" %}
       {% endif %}
-      {% render "state", symbol: "✓", lift: check_lift, headline: t_no_load, detail: t_no_load_detail, symbol_class: check_class, label_class: "label--large lg:label--xlarge" %}
+      {% render "state", detail_class: "description--large lg:description--xlarge", symbol: "✓", lift: check_lift, headline: t_no_load, detail: t_no_load_detail, symbol_class: check_class, label_class: "label--xlarge lg:label--xxlarge" %}
     {% else %}
       {% if fill %}
         <div class="flex flex--col gap--small w--full stretch-y">
@@ -52,4 +52,4 @@
   {% endif %}
 </div>
 
-{% render "title_bar", icon: title_bar_icon, title: t_title_forecast, instance: t_instance_full %}
+{% render "title_bar", icon: title_bar_icon, title: t_title_forecast, instance: t_instance_full, instance_short: t_instance_short %}

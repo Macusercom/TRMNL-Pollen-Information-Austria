@@ -13,6 +13,42 @@ RSpec.describe 'Pollen Information Austria' do
       'min_severity' => '1', 'pollen_filter' => '', 'show_allergy_risk' => 'true' }
   end
 
+  # polleninformation.at asks public apps to name the data source. The title bar shows the full credit and
+  # switches to "polleninformation.at" only where the full one would be cut; neither may be cut.
+  context 'with the data source in the title bar' do
+    spring = forecast('spring')
+    full_credit = 'Österreichischer Polleninformationsdienst, www.polleninformation.at'
+    let(:mocks) { { 'https://www.polleninformation.at/api/forecast/public*' => { json: spring } } }
+    let(:probe) do
+      <<~JS.tr("\n", ' ')
+        JSON.stringify({ credit: document.querySelector('.title_bar .instance').textContent.trim(),
+          cut: [...document.querySelectorAll('.title_bar .title, .title_bar .instance')]
+            .filter((el) => el.scrollWidth > el.clientWidth + 1).map((el) => el.className) })
+      JS
+    end
+
+    def title_bar(view:, lang: 'de', **screen)
+      JSON.parse(trmnl.render(view:, **screen, mocks:, custom_fields: base_fields.merge('language' => lang)).evaluate(probe))
+    end
+
+    it 'names the source in full in the full view on TRMNL OG' do
+      expect(title_bar(view: 'full', device: 'og_png')['credit']).to eq(full_credit)
+    end
+
+    it 'falls back to the domain in the quadrant view on TRMNL OG' do
+      expect(title_bar(view: 'quadrant', device: 'og_png')['credit']).to eq('polleninformation.at')
+    end
+
+    # German and the languages with the longest view titles.
+    %w[full half_horizontal half_vertical quadrant].product(
+      %w[de lt lv fi], [{ device: 'og_png' }, { device: 'v2' }, { device: 'v2', orientation: :portrait }]
+    ).each do |view, lang, screen|
+      it "keeps the #{view} title bar uncut on #{TRMNLP::Testing.screen_name(screen)} in #{lang}" do
+        expect(title_bar(view:, lang:, **screen)['cut']).to be_empty
+      end
+    end
+  end
+
   {
     # A real answer from November: one pollen type at level 1, everything else at 0.
     'a quiet autumn day' => [forecast('autumn'), {}],
